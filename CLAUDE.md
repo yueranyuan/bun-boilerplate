@@ -1,41 +1,84 @@
-# Bun Boilerplate - Claude Instructions
+# Claude Instructions for bun-boilerplate
 
-## What this is
+## Project Overview
 
-A minimal boilerplate for building React applications using Bun 1.3.1 + Vite.
+This is a **true Bun 1.3.1 boilerplate** - NOT a Vite/Node.js project that uses Bun as a package manager.
 
-## Stack
+**Key Requirements:**
+- Uses **Bun's native dev server** (`Bun.serve()`)
+- Uses **Bun's native bundler** (`Bun.build()`)
+- Implements **`console: true`** feature (frontend logs to backend terminal)
+- NO Vite, NO Webpack, NO Node.js dev tools
 
-- **Runtime**: Bun 1.3.1
-- **Frontend**: React 19 + TypeScript
-- **Build Tool**: Vite 7
-- **Linting**: ESLint
+## Architecture
 
-## Commands
+### Server (`server.ts`)
+- Bun HTTP server with `Bun.serve()`
+- **CRITICAL:** `development: { console: true }` must be enabled
+- File watcher rebuilds on changes in `src/`
+- Serves `public/index.html` and `public/bundle.js`
 
-```bash
-bun install          # Install dependencies
-bun dev              # Start dev server (port 5173)
-bun run build        # Build for production
-bun preview          # Preview production build
-bun run lint         # Lint code
+### Build Process
+- Uses `Bun.build()` API (NOT Vite, NOT Webpack)
+- Entry: `src/index.tsx`
+- Output: `public/bundle.js`
+- Source maps enabled for development
+
+### Frontend
+- React 19 with TypeScript
+- Single-file bundle served by Bun
+- Console logs are proxied to backend terminal (this is the magic!)
+
+## Important Rules
+
+### ✅ DO:
+- Use `Bun.serve()` for the dev server
+- Use `Bun.build()` for bundling
+- Keep `development: { console: true }` in server config
+- Use native Bun APIs whenever possible
+
+### ❌ DON'T:
+- Add Vite as a dependency
+- Add Webpack, Parcel, or other bundlers
+- Remove the `console: true` feature
+- Replace Bun server with Express/Hono/etc. unless requested
+
+## Testing the `console: true` Feature
+
+To verify this feature works:
+1. Run `bun run dev`
+2. Open browser to `http://localhost:3000`
+3. Click the counter buttons
+4. **Check the terminal** - you should see console logs from the React app
+
+Example expected output:
+```
+App rendered with count: 0
+Incrementing count from 0 to 1
+App rendered with count: 1
 ```
 
-## How This Boilerplate Is Used
+## Common Changes
 
-This is meant to be **cloned or forked** as a starting point for new projects:
+### Adding new dependencies
+```bash
+bun add package-name
+```
 
-1. Clone/fork this repository
-2. Run `bun install`
-3. Start developing with `bun dev`
-4. Customize components in `src/`
-5. Build with `bun run build`
-6. Deploy `dist/` folder
+### Adding new pages/routes
+- This is a minimal boilerplate - add React Router if routing is needed
+- Keep using the same `Bun.serve()` + `Bun.build()` pattern
 
-## Rules for Claude
+### Production deployment
+- Build with `bun run build` (minified)
+- Run with `NODE_ENV=production bun run start`
+- Consider adding process manager (PM2, etc.)
 
-1. **Always use Bun CLI** (`bun add`, not `npm install`)
-2. **Use Vite conventions** (`import.meta.env` for env vars)
-3. **Test with `bun dev`** after changes
-4. **Follow React 19 patterns** - functional components only
-5. **Respect ESLint rules**
+## Philosophy
+
+This boilerplate showcases **what makes Bun unique**:
+- Native dev server (no middleware stack)
+- Native bundler (no complex config)
+- `console: true` (impossible with Vite/Webpack)
+
+Keep it minimal, keep it Bun-native, keep it fast.

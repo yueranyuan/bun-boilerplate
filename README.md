@@ -1,58 +1,111 @@
-# Bun Boilerplate
+# Bun 1.3.1 Boilerplate
 
-Minimal boilerplate for building React applications with Bun 1.3.1, Vite, and TypeScript.
+A **true Bun boilerplate** using Bun's native development server, bundler, and the revolutionary `console: true` feature that pipes frontend console logs to your backend terminal.
 
-## Quick Start
+## 🚀 Features
+
+- ⚡️ **Bun 1.3.1** - Lightning-fast JavaScript runtime
+- 🔥 **Native Bun Dev Server** - No Vite, no Webpack, pure Bun
+- 🖥️ **`console: true`** - Frontend `console.log()` appears in backend terminal!
+- ⚛️ **React 19** - Latest React with hooks
+- 🎨 **TypeScript** - Full type safety
+- 📦 **Native Bun Bundler** - Fast builds with `Bun.build()`
+- 🔄 **Hot Reload** - File watching with automatic rebuilds
+
+## 📦 Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/yueranyuan/bun-boilerplate.git
+cd bun-boilerplate
+
 # Install dependencies
 bun install
-
-# Start development server
-bun dev
 ```
 
-Visit http://localhost:5173 to see your app!
+## 🛠️ Usage
 
-## What's Included
-
-- ⚡️ **Bun 1.3.1** - Lightning-fast JavaScript runtime and package manager
-- ⚛️ **React 19** - Latest React with modern hooks
-- 🎨 **TypeScript** - Type-safe development with strict mode
-- 🔥 **Vite** - Next generation frontend tooling with instant HMR
-- ✅ **ESLint** - Code linting with React-specific rules
-- 📦 **Production Builds** - Optimized builds with code splitting
-
-## Scripts
+### Development
 
 ```bash
-# Development server with hot reload (port 5173)
-bun dev
-
-# Type-check and build for production
-bun run build
-
-# Preview production build locally
-bun preview
-
-# Lint code
-bun run lint
+bun run dev
 ```
 
-## How This Boilerplate Works
+This starts the Bun dev server at `http://localhost:3000` with:
+- Hot reload watching `src/` directory
+- Frontend console logs piped to terminal
+- Source maps for debugging
 
-This boilerplate is designed to be cloned or forked as a starting point for new React projects:
+### Production Build
 
-1. **Clone**: Start by cloning this repository
-2. **Install**: Run `bun install`
-3. **Develop**: Run `bun dev` and start building
-4. **Build**: Run `bun run build` for production
-5. **Deploy**: Deploy the `dist/` folder to any static hosting
+```bash
+bun run build
+bun run start
+```
 
-## Requirements
+## 🎯 The `console: true` Feature
 
-- **Bun 1.3.1 or higher** - [Install Bun](https://bun.sh)
+The killer feature of Bun 1.3.1 is `development: { console: true }` in `Bun.serve()`.
 
-## License
+**What it does:**
+- All `console.log()`, `console.error()`, etc. from your **frontend React code**
+- Automatically appear in your **backend terminal**
+- Perfect for debugging without opening browser DevTools
 
-MIT - feel free to use this template for any project!
+**Example:**
+```typescript
+// In your React component
+console.log('Button clicked!', someData)
+```
+
+**You'll see in terminal:**
+```
+[Frontend] Button clicked! { count: 5 }
+```
+
+## 📁 Project Structure
+
+```
+bun-boilerplate/
+├── src/
+│   ├── App.tsx          # Main React component
+│   └── index.tsx        # React entry point
+├── public/
+│   ├── index.html       # HTML template
+│   └── bundle.js        # Built bundle (generated)
+├── server.ts            # Bun dev server with console: true
+├── package.json
+└── tsconfig.json
+```
+
+## 🔧 How It Works
+
+1. **`server.ts`** - Bun server with `Bun.serve()` and `development: { console: true }`
+2. **`Bun.build()`** - Native bundler compiles React/TypeScript to `public/bundle.js`
+3. **File watcher** - Watches `src/` and rebuilds on changes
+4. **Console proxying** - Frontend logs forwarded to backend terminal
+
+## 🆚 Why Not Vite?
+
+**Vite** is great, but it's not a "Bun boilerplate" - it's a Node.js tool that happens to work with Bun as a package manager.
+
+**This boilerplate** uses:
+- ✅ Bun's native dev server
+- ✅ Bun's native bundler
+- ✅ Bun-specific features like `console: true`
+- ✅ Pure Bun runtime (no Node.js dependencies)
+
+## 📚 Learn More
+
+- [Bun Documentation](https://bun.sh/docs)
+- [Bun.serve() API](https://bun.sh/docs/api/http)
+- [Bun.build() API](https://bun.sh/docs/bundler)
+- [React Documentation](https://react.dev)
+
+## 📝 License
+
+MIT
+
+## 🤝 Contributing
+
+Contributions welcome! This is meant to be a minimal, clean starting point for Bun + React projects.
