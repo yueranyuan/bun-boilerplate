@@ -1,33 +1,34 @@
 # Claude Instructions for bun-boilerplate
 
-## Project Overview
+## What This Is
 
-This is a **true Bun 1.3.1 boilerplate** - NOT a Vite/Node.js project that uses Bun as a package manager.
+A **true Bun 1.3.1 boilerplate** using Bun's native dev server and bundler - NOT a Vite project.
 
-**Key Requirements:**
-- Uses **Bun's native dev server** (`Bun.serve()`)
-- Uses **Bun's native bundler** (`Bun.build()`)
-- Implements **`console: true`** feature (frontend logs to backend terminal)
-- NO Vite, NO Webpack, NO Node.js dev tools
+**Critical Feature: `console: true`**
+- All `console.log()` calls from frontend React code appear in the backend terminal
+- This is THE defining feature - impossible with Vite/Webpack
+- Server runs on port 8080 (configurable in `server.ts`)
 
 ## Architecture
 
-### Server (`server.ts`)
-- Bun HTTP server with `Bun.serve()`
-- **CRITICAL:** `development: { console: true }` must be enabled
-- File watcher rebuilds on changes in `src/`
-- Serves `public/index.html` and `public/bundle.js`
+**server.ts** - Bun HTTP server
+```typescript
+Bun.serve({
+  port: 8080,
+  development: { console: true }, // ← Frontend logs to terminal!
+  fetch(req) { /* serves bundle & HTML */ }
+})
+```
 
-### Build Process
-- Uses `Bun.build()` API (NOT Vite, NOT Webpack)
-- Entry: `src/index.tsx`
-- Output: `public/bundle.js`
-- Source maps enabled for development
+**Build Process**
+- `Bun.build()` compiles `src/index.tsx` → `public/bundle.js`
+- File watcher auto-rebuilds on changes in `src/`
+- Source maps enabled for debugging
 
-### Frontend
-- React 19 with TypeScript
-- Single-file bundle served by Bun
-- Console logs are proxied to backend terminal (this is the magic!)
+**Frontend**
+- React 19 + TypeScript
+- All console.log() calls proxy to backend terminal
+- Inline styles (no CSS files for simplicity)
 
 ## Important Rules
 
@@ -43,42 +44,47 @@ This is a **true Bun 1.3.1 boilerplate** - NOT a Vite/Node.js project that uses 
 - Remove the `console: true` feature
 - Replace Bun server with Express/Hono/etc. unless requested
 
-## Testing the `console: true` Feature
+## Verifying `console: true` Works
 
-To verify this feature works:
-1. Run `bun run dev`
-2. Open browser to `http://localhost:3000`
-3. Click the counter buttons
-4. **Check the terminal** - you should see console logs from the React app
+1. Start server: `bun run dev`
+2. Open `http://localhost:8080` in browser
+3. Click the +/- buttons in the React app
+4. **Watch the terminal** - frontend console.log() appears there!
 
-Example expected output:
+Expected terminal output:
 ```
 App rendered with count: 0
 Incrementing count from 0 to 1
 App rendered with count: 1
 ```
 
-## Common Changes
+If you DON'T see frontend logs in terminal → `console: true` is broken or removed.
 
-### Adding new dependencies
+## Commands
+
 ```bash
-bun add package-name
+bun run dev      # Start dev server with hot reload + console: true
+bun run build    # Production build (minified)
+bun run start    # Production server
 ```
 
-### Adding new pages/routes
-- This is a minimal boilerplate - add React Router if routing is needed
-- Keep using the same `Bun.serve()` + `Bun.build()` pattern
+## Rules
 
-### Production deployment
-- Build with `bun run build` (minified)
-- Run with `NODE_ENV=production bun run start`
-- Consider adding process manager (PM2, etc.)
+**✅ MUST:**
+- Keep `development: { console: true }` in `Bun.serve()` config
+- Use `Bun.build()` for bundling (NOT Vite/Webpack)
+- Test that frontend logs appear in terminal after changes
+
+**❌ NEVER:**
+- Add Vite, Webpack, or other Node.js bundlers
+- Remove the `console: true` setting
+- Replace Bun.serve() with Express/Hono unless explicitly requested
 
 ## Philosophy
 
-This boilerplate showcases **what makes Bun unique**:
-- Native dev server (no middleware stack)
-- Native bundler (no complex config)
-- `console: true` (impossible with Vite/Webpack)
+This showcases Bun's unique features:
+- **console: true** - Frontend logs in backend (impossible elsewhere)
+- Native dev server - No middleware bloat
+- Native bundler - No complex webpack configs
 
-Keep it minimal, keep it Bun-native, keep it fast.
+Keep it minimal, Bun-native, and fast.
