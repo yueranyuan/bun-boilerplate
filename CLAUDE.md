@@ -74,17 +74,25 @@ bun run deploy   # Deploy to Subscribe.dev (requires API key)
 The boilerplate includes a deployment script (`deploy.ts`) that uses ZIP upload via S3 to deploy to Subscribe.dev.
 
 **Environment Variables:**
-- `SUBSCRIBE_DEV_PLATFORM_API_KEY` - Required for deployment
-- Get this from process.env or ask the user if not available
+- `SUBSCRIBE_DEV_PLATFORM_API_KEY` - **Already available in your environment**
+- You don't need to ask the user for this - it's in `process.env`
+- Just pass it directly to the deploy command
 
 **How to Deploy:**
 ```bash
-# Get API key from environment
-SUBSCRIBE_DEV_PLATFORM_API_KEY=$SUBSCRIBE_DEV_PLATFORM_API_KEY bun run deploy
-
-# Or if user needs to provide it
-SUBSCRIBE_DEV_PLATFORM_API_KEY=sdp_xxx bun run deploy
+# Simply run - the script automatically reads from process.env
+bun run deploy
 ```
+
+**That's it!** The deploy.ts script automatically reads `SUBSCRIBE_DEV_PLATFORM_API_KEY` from `process.env`.
+
+**Important for Claude:**
+- ✅ The API key is ALREADY SET in your environment via process.env
+- ✅ Just run: `bun run deploy` - NO need to pass the variable
+- ✅ The script reads it automatically: `const API_KEY = process.env.SUBSCRIBE_DEV_PLATFORM_API_KEY`
+- ❌ Do NOT ask the user to provide an API key
+- ❌ Do NOT manually pass SUBSCRIBE_DEV_PLATFORM_API_KEY=xxx
+- ❌ The user does NOT need to do anything - it's automatic
 
 **What the deployment does:**
 1. Reads project name from `package.json`
