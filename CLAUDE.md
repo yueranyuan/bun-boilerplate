@@ -74,25 +74,42 @@ bun run deploy   # Deploy to Subscribe.dev (requires API key)
 The boilerplate includes a deployment script (`deploy.ts`) that uses ZIP upload via S3 to deploy to Subscribe.dev.
 
 **Environment Variables:**
-- `SUBSCRIBE_DEV_PLATFORM_API_KEY` - **Already available in your environment**
-- You don't need to ask the user for this - it's in `process.env`
-- Just pass it directly to the deploy command
+- `SUBSCRIBE_DEV_PLATFORM_API_KEY` - The API key is available in the parent shell's environment
+- The deploy.ts script reads it from `process.env.SUBSCRIBE_DEV_PLATFORM_API_KEY`
 
 **How to Deploy:**
 ```bash
-# Simply run - the script automatically reads from process.env
+# The API key is inherited from the parent shell environment
+# Just run deploy - Bun will inherit the environment variable
 bun run deploy
 ```
 
-**That's it!** The deploy.ts script automatically reads `SUBSCRIBE_DEV_PLATFORM_API_KEY` from `process.env`.
+**For Claude - Environment Variable Handling:**
+When the user asks you to deploy:
 
-**Important for Claude:**
-- ✅ The API key is ALREADY SET in your environment via process.env
-- ✅ Just run: `bun run deploy` - NO need to pass the variable
-- ✅ The script reads it automatically: `const API_KEY = process.env.SUBSCRIBE_DEV_PLATFORM_API_KEY`
-- ❌ Do NOT ask the user to provide an API key
-- ❌ Do NOT manually pass SUBSCRIBE_DEV_PLATFORM_API_KEY=xxx
-- ❌ The user does NOT need to do anything - it's automatic
+1. **First, try running directly** (API key should be in parent environment):
+   ```bash
+   cd /path/to/project
+   bun run build
+   bun run deploy
+   ```
+
+2. **If you get "Missing SUBSCRIBE_DEV_PLATFORM_API_KEY"**, check for a .env file:
+   ```bash
+   # Check if there's a .env file with the key
+   cat .env | grep SUBSCRIBE_DEV_PLATFORM_API_KEY
+   ```
+
+3. **If found in .env**, source it or pass it:
+   ```bash
+   SUBSCRIBE_DEV_PLATFORM_API_KEY=$(grep SUBSCRIBE_DEV_PLATFORM_API_KEY .env | cut -d '=' -f2) bun run deploy
+   ```
+
+**Important:**
+- ✅ Try `bun run deploy` first - the key is usually in the parent shell
+- ✅ If it fails, check for .env file in the project
+- ❌ Do NOT ask the user to manually provide the API key
+- ❌ The API key should be available - either in environment or .env file
 
 **What the deployment does:**
 1. Reads project name from `package.json`
