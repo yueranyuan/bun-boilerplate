@@ -108,8 +108,8 @@ When the user asks you to deploy:
 **Important:**
 - ✅ Try `bun run deploy` first - the key is usually in the parent shell
 - ✅ If it fails, check for .env file in the project
-- ❌ Do NOT ask the user to manually provide the API key
-- ❌ The API key should be available - either in environment or .env file
+- ℹ️ You typically don't need to ask the user for an API key (it's already available)
+- ℹ️ If the user specifically provides an API key, you can use it, but the default should work
 
 **What the deployment does:**
 1. Reads project name from `package.json`
