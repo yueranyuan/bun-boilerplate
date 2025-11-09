@@ -66,7 +66,34 @@ If you DON'T see frontend logs in terminal → `console: true` is broken or remo
 bun run dev      # Start dev server with hot reload + console: true
 bun run build    # Production build (minified)
 bun run start    # Production server
+bun run deploy   # Deploy to Subscribe.dev (requires API key)
 ```
+
+## Deployment
+
+The boilerplate includes a deployment script (`deploy.ts`) that uses ZIP upload via S3 to deploy to Subscribe.dev.
+
+**Environment Variables:**
+- `SUBSCRIBE_DEV_PLATFORM_API_KEY` - Required for deployment
+- Get this from process.env or ask the user if not available
+
+**How to Deploy:**
+```bash
+# Get API key from environment
+SUBSCRIBE_DEV_PLATFORM_API_KEY=$SUBSCRIBE_DEV_PLATFORM_API_KEY bun run deploy
+
+# Or if user needs to provide it
+SUBSCRIBE_DEV_PLATFORM_API_KEY=sdp_xxx bun run deploy
+```
+
+**What the deployment does:**
+1. Reads project name from `package.json`
+2. Creates ZIP from `public/` folder (index.html + bundle.js)
+3. Uploads to S3 via presigned URLs
+4. Deploys to Subscribe.dev with deterministic URL
+5. Returns live URL: `https://projectid.apps.subscribe.dev`
+
+**Important:** The deployment script uses the proper S3 upload flow (same as the dashboard), NOT the SDK's `upload()` method which only works for HTML. This ensures ZIP files are properly extracted and served.
 
 ## Rules
 

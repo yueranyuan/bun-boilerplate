@@ -43,6 +43,28 @@ bun run build
 bun run start
 ```
 
+### Deploy to Subscribe.dev
+
+Deploy your app to production with one command:
+
+```bash
+# Build first
+bun run build
+
+# Deploy (requires Subscribe.dev platform API key)
+SUBSCRIBE_DEV_PLATFORM_API_KEY=sdp_xxx bun run deploy
+```
+
+Get your platform API key from [Subscribe.dev Dashboard](https://subscribe.dev)
+
+**What happens:**
+1. Creates a ZIP bundle from your `public/` folder
+2. Uploads to Subscribe.dev via S3
+3. Deploys with deterministic project-based URL
+4. Returns your live URL (e.g., `https://abc123.apps.subscribe.dev`)
+
+The deployment script (`deploy.ts`) uses the same robust S3 upload flow that the Subscribe.dev dashboard uses, ensuring proper file extraction and serving.
+
 ## 🎯 The `console: true` Feature
 
 The killer feature of Bun 1.3.1 is `development: { console: true }` in `Bun.serve()`.

@@ -7,12 +7,15 @@
   "scripts": {
     "dev": "bun run server.ts",
     "build": "bun build ./src/index.tsx --outdir ./public --entry-naming bundle.js --minify",
-    "start": "NODE_ENV=production bun run server.ts"
+    "start": "NODE_ENV=production bun run server.ts",
+    "deploy": "bun run deploy.ts"
   },
   "devDependencies": {
+    "@subscribe.dev/sdk": "^1.0.6",
     "@types/bun": "latest",
     "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2"
+    "@types/react-dom": "^19.2.2",
+    "jszip": "^3.10.1"
   },
   "peerDependencies": {
     "typescript": "^5"
